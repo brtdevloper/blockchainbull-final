@@ -12,6 +12,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./styles/web3modal-override.css";
 import "./utils/web3modal-customizer";
 
+
+
 // Config & Context
 import { config } from "./config/web3modal";
 import { WalletProvider } from "./context/WalletContext";
