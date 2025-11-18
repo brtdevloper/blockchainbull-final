@@ -69,10 +69,17 @@ export interface InvestmentRecord {
   timestamp: string;
 }
 
+export interface ReferralAddressInfo {
+  address: string;
+  investment: number;
+  commission: number;
+  registrationDate?: string;
+}
+
 export interface ReferralData {
   level: number;
   count: number;
-  addresses: string[];
+  addresses: ReferralAddressInfo[];
   totalInvestment: number;
   totalEarnings: number;
 }
@@ -216,17 +223,22 @@ class ApiService {
         const levelData = data[levelKey];
 
         if (levelData) {
-          // Extract addresses from referrals
-          const addresses = levelData.referrals.map((referral: any) => referral.referredAddress);
+          // Extract detailed address info from referrals
+          const addresses = (levelData.referrals || []).map((referral: any) => ({
+            address: referral.referredAddress,
+            investment: referral.investmentAmount || 0,
+            commission: referral.commissionEarned || 0,
+            registrationDate: referral.registrationDate
+          }));
 
-          // Calculate total investment and earnings from referrals
-          const totalInvestment = levelData.referrals.reduce((sum: number, referral: any) => {
-            return sum + (referral.investmentAmount || 0);
-          }, 0);
+          // Prefer pre-computed totals from API but fall back to local calculation
+          const totalInvestment = typeof levelData.totalInvestment === 'number'
+            ? levelData.totalInvestment
+            : addresses.reduce((sum: number, referral: any) => sum + (referral.investment || 0), 0);
 
-          const totalEarnings = levelData.referrals.reduce((sum: number, referral: any) => {
-            return sum + (referral.commissionEarned || 0);
-          }, 0);
+          const totalEarnings = typeof levelData.totalEarnings === 'number'
+            ? levelData.totalEarnings
+            : addresses.reduce((sum: number, referral: any) => sum + (referral.commission || 0), 0);
 
           levelWiseArray.push({
             level: i,

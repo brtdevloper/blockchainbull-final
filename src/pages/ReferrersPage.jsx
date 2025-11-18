@@ -514,19 +514,19 @@ const ReferrersPage = () => {
                           Level {levelData.level}
                         </Typography>
                         <Typography variant="body2" sx={{ color: '#ffffff' }}>
-                          {levelData.count} referrals • {levelData.totalInvestment.toFixed(2)} USDT invested • {levelData.totalEarnings.toFixed(2)} USDT earned
+                          {levelData.count} referrals • {(levelData.totalInvestment || 0).toFixed(2)} USDT invested • {(levelData.totalEarnings || 0).toFixed(2)} USDT earned
                         </Typography>
                       </Box>
                     </Box>
                   </AccordionSummary>
                   <AccordionDetails sx={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
                     <Typography variant="h6" sx={{ color: '#b89250', mb: 2 }}>
-                      Level {levelData.level} Referral Addresses ({levelData.addresses.length})
+                      Level {levelData.level} Referral Addresses ({levelData.addresses?.length || 0})
                     </Typography>
-                    {levelData.addresses.length > 0 ? (
+                    {levelData.addresses && levelData.addresses.length > 0 ? (
                       <Grid container spacing={2}>
-                        {levelData.addresses.map((address, index) => (
-                          <Grid item xs={12} sm={6} md={4} key={index}>
+                        {levelData.addresses.map((referral, index) => (
+                          <Grid item xs={12} sm={6} md={4} key={`${referral.address}-${index}`}>
                             <Card sx={{
                               backgroundColor: 'rgba(255, 255, 255, 0.05)',
                               border: '1px solid rgba(184, 146, 80, 0.3)',
@@ -541,10 +541,13 @@ const ReferrersPage = () => {
                                   Address #{index + 1}
                                 </Typography>
                                 <Typography variant="body2" sx={{ color: '#ffffff', fontFamily: 'monospace', wordBreak: 'break-all', mt: 1 }}>
-                                  {address}
+                                  {referral.address}
                                 </Typography>
                                 <Typography variant="caption" sx={{ color: '#ffffff', opacity: 0.7, mt: 1, display: 'block' }}>
-                                  Investment: {levelData.totalInvestment.toFixed(2)} USDT
+                                  Investment: {(referral.investment || 0).toFixed(2)} USDT
+                                </Typography>
+                                <Typography variant="caption" sx={{ color: '#ffffff', opacity: 0.7, display: 'block' }}>
+                                  Commission: {(referral.commission || 0).toFixed(2)} USDT
                                 </Typography>
                               </CardContent>
                             </Card>
