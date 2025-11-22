@@ -472,7 +472,7 @@ const ReferrersPage = () => {
           </Grid>
 
           {/* 3. Level-wise Referral Data */}
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Typography variant="h5" gutterBottom sx={{ color: '#b89250', fontWeight: 'bold', mt: 4, mb: 3, textAlign: 'center' }}>
               📈 Level-wise Referral Details (1-10)
             </Typography>
@@ -577,7 +577,7 @@ const ReferrersPage = () => {
                 </CardContent>
               </Card>
             )}
-          </Grid>
+          </Grid> */}
         </Grid>
       )}
       <Footer />
